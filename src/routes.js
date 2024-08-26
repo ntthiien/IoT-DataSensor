@@ -3,6 +3,8 @@ import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Profile= React.lazy(()=> import('./views/profile/Profile'))
+const DataSensor=React.lazy(()=> import('./views/datasensor/DataSensor'))
+const HistoryAction= React.lazy(()=> import('./views/historyAction/HistoryAction'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -57,6 +59,8 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/profile', name: 'Profile', element: Profile},
+  { path: '/datasensor', name:'DataSensor', element: DataSensor},
+  { path: '/history', name:'HistoryAction', element:HistoryAction},
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
