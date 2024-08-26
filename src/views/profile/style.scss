@@ -1,0 +1,28 @@
+/* src/components/Profile.css */
+.profile-container {
+    max-inline-size: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .profile-header {
+    margin-block-end: 20px;
+  }
+  
+  .profile-avatar {
+    inline-size: 100px;
+    block-size: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-block-end: 10px;
+  }
+  
+  .profile-body p {
+    margin: 10px 0;
+    font-size: 16px;
+  }
