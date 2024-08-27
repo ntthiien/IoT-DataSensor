@@ -1,42 +1,42 @@
-// import React  from "react";
+import React from 'react'
+import { CContainer, CRow, CCol, CCard, CCardBody, CCardImage, CCardTitle, CCardText } from '@coreui/react'
 
-// const Profile = () => {
-//     return (
-//         <div>
-//             <h2> hello</h2>
-//         </div>
-//     )
-// }
+const members = [
+  {
+    name: 'John Doe',
+    gender: 'Male',
+    // avatar: 'https://via.placeholder.com/150',
+  },
+  {
+    name: 'Jane Smith',
+    gender: 'Female',
+    // avatar: 'https://via.placeholder.com/150',
+  },
+  {
+    name: 'Alice Johnson',
+    gender: 'Female',
+    // avatar: 'https://via.placeholder.com/150',
+  },
+]
 
-// export default Profile
-
-// src/components/Profile.js
-import React from 'react';
-import './style.scss'; // Tạo file CSS nếu cần
-
-const Profile = () => {
-  // Giả lập thông tin người dùng
-  const user = {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    bio: "A passionate developer from New York.",
-   // avatar: "https://via.placeholder.com/150",
-    joined: "January 2020"
-  };
-
+const ProfilePage = () => {
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <img src={user.avatar} alt="User Avatar" className="profile-avatar" />
-        <h2>{user.name}</h2>
-      </div>
-      <div className="profile-body">
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Bio:</strong> {user.bio}</p>
-        <p><strong>Joined:</strong> {user.joined}</p>
-      </div>
-    </div>
-  );
+    <CContainer>
+      <CRow className="justify-content-center">
+        {members.map((member, index) => (
+          <CCol xs="12" sm="6" md="4" key={index}>
+            <CCard className="text-center">
+              <CCardImage orientation="top" src={member.avatar} alt={member.name} />
+              <CCardBody>
+                <CCardTitle>{member.name}</CCardTitle>
+                <CCardText>{member.gender}</CCardText>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        ))}
+      </CRow>
+    </CContainer>
+  )
 }
 
-export default Profile;
+export default ProfilePage
