@@ -1,15 +1,15 @@
 # IoT DATA-SENSER
 # Trang DashBoard
-![1](assets/images/1.jpg)
+![1](src/assets/images/1.jpg)
 # Trang DataSensor
-![2](assets/images/2.jpg)
+![2](src/assets/images/2.jpg)
 # Trang History
-![4](assets/images/3.jpg)
+![4](src/assets/images/3.jpg)
 # Trang Profile
-![4](assets/images/4.jpg)
-![5](assets/images/5.jpg)
+![4](src/assets/images/4.jpg)
+![5](src/assets/images/5.jpg)
 
-Đây là một trang web đơn giản giúp người dùng dễ dàng theo dõi các chỉ số nhiệt độ, độ ẩm, ánh sáng trong không gian phòng và có thể điều khiển các thiết bị điện từ !
+This is a simple website that helps users easily monitor temperature, humidity, and light indicators in the room and control electronic devices!
 
 
 ## Versions
