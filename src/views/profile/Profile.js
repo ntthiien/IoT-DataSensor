@@ -8,23 +8,32 @@ const Profile = () => {
       studentId: 'B21DCCN488',
       className: 'IoT nhóm 5',
       avatar: 'https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg', // Thay đổi bằng URL ảnh thực
+      github:"abc",
+      pdf:"123",
+      apidoc:"111",
     },
     {
       name: 'Nguyễn Thị Thu Hiền',
       studentId: 'B21DCCN336',
       className: 'IoT nhóm 5',
       avatar: 'https://media.licdn.com/dms/image/v2/D560BAQE96KctT7x-iw/company-logo_200_200/company-logo_200_200/0/1666170056423?e=2147483647&v=beta&t=Vw7Ylrels80CcHftE1Xb2dkTNDca30jOvBrI4iLL0qg', // Thay đổi bằng URL ảnh thực
+      github:"abc",
+      pdf:"123",
+      apidoc:"111",
     },
     {
       name: 'Nguyễn Thị Bảo Ngọc',
       studentId: 'B21DCCN566',
       className: 'IoT nhóm 5',
       avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfUO7KmhEYmL1i-oVNgAfNDecjmGZtFkIsgA&s',
+      github:"abc",
+      pdf:"123",
+      apidoc:"111",
     }
     ];
 
-  const commonGithub = "https://github.com/common-repo";
-  const commonPdf = "/path/to/common-document.pdf";
+  // const commonGithub = "abc";
+  // const commonPdf = "";
 
   return (
     <div className="profile-container">
@@ -38,29 +47,17 @@ const Profile = () => {
                 <p><strong>Tên:</strong> {member.name}</p>
                 <p><strong>Mã sinh viên:</strong> {member.studentId}</p>
                 <p><strong>Lớp:</strong> {member.className}</p>
+                <p><strong>GitHub:</strong> <a href={member.github} target="_blank" rel="noopener noreferrer">{member.github}</a></p>
+                <p><strong>PDF:</strong> <a href={member.pdf} target="_blank" rel="noopener noreferrer">Download PDF</a></p>
+                <p><strong>APIDoc:</strong> <a href={member.apidoc} target="_blank" rel="noopener noreferrer">{member.apidoc}</a></p>
               </div>
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="common-links">
-        <div className="github-section">
-          <h2>Common GitHub Repository</h2>
-          <a href={commonGithub} target="_blank" rel="noopener noreferrer">
-            {commonGithub}
-          </a>
-        </div>
-
-        <div className="pdf-section">
-          <h2>Common PDF Document</h2>
-          <a href={commonPdf} target="_blank" rel="noopener noreferrer">
-            Download PDF
-          </a>
-        </div>
       </div>
     </div>
   );
 };
 
 export default Profile;
+

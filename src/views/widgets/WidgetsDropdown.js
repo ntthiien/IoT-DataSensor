@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 import {
   CRow,
   CCol,
-  CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle,
   CWidgetStatsA,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -23,24 +19,11 @@ const WidgetsDropdown = (props) => {
           value={
             <>
               22°C{' '}
-              <span className="fs-6 fw-normal">
-                (5% <CIcon icon={cilSun} />)
-              </span>
             </>
           }
           title="Temperature"
           action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
-                <CIcon icon={cilSun} />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+            <CIcon icon={cilSun} className="me-2" style={{ fontSize: '50px', color: 'rgba(255, 255, 255, 0.8)' }} />
           }
         />
       </CCol>
@@ -50,24 +33,11 @@ const WidgetsDropdown = (props) => {
           value={
             <>
               55%{' '}
-              <span className="fs-6 fw-normal">
-                (2% <CIcon icon={cilDrop} />)
-              </span>
             </>
           }
           title="Humidity"
           action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
-                <CIcon icon={cilDrop} />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+            <CIcon icon={cilDrop} />
           }
         />
       </CCol>
@@ -77,24 +47,11 @@ const WidgetsDropdown = (props) => {
           value={
             <>
               300 lux{' '}
-              <span className="fs-6 fw-normal">
-                (10% <CIcon icon={cilLightbulb} />)
-              </span>
             </>
           }
           title="Light"
           action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="text-white p-0">
-                <CIcon icon={cilLightbulb} />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+            <CIcon icon={cilLightbulb} />
           }
         />
       </CCol>
@@ -108,3 +65,4 @@ WidgetsDropdown.propTypes = {
 }
 
 export default WidgetsDropdown
+

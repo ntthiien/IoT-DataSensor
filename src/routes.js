@@ -9,10 +9,10 @@ const HistoryAction= React.lazy(()=> import('./views/historyAction/HistoryAction
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/profile', name: 'Profile', element: Profile},
-  { path: '/datasensor', name:'DataSensor', element: DataSensor},
-  { path: '/history', name:'HistoryAction', element:HistoryAction},
+  { path: '/dashboard', name: 'Dashboard', element: Dashboard ,component:'Dashboard'},
+  { path: '/profile', name: 'Profile', element: Profile, component:'Profile'},
+  { path: '/datasensor', name:'DataSensor', element: DataSensor, component:'DataSensor'},
+  { path: '/history', name:'HistoryAction', element:HistoryAction, component:'HistoryAction'},
   
 ]
 

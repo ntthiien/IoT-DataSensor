@@ -76,7 +76,7 @@ const Table = () => {
       <CCard className="mb-4">
         <CCardBody>
           <div>
-            <div style={{ position: 'relative', marginBottom: '10px' }}>
+            <div style={{ position: 'relative', marginBottom: '10px',marginLeft:'70%'  }}>
               <input
                 type="text"
                 placeholder="Tìm kiếm..."
@@ -97,7 +97,7 @@ const Table = () => {
               }} />
               
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' , marginRight:'350px'}}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' , marginRight:'50%'}}>
               <CFormSelect
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}

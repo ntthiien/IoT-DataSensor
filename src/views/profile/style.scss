@@ -1,9 +1,13 @@
+
+
 .profile-container {
   padding: 30px;
   background-color: #f7f9fc;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
+  width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
+  box-sizing: border-box; /* Đảm bảo padding không làm tràn màn hình */
 }
 
 .profile-card {
@@ -13,7 +17,7 @@
   margin: 20px;
   padding: 25px;
   width: 100%;
-  max-width: 700px;
+  max-width: 100%;
   text-align: center;
 }
 
@@ -27,18 +31,23 @@
 .student-list {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  justify-content: space-between; /* Chia đều khoảng cách giữa các sinh viên */
+  align-items: flex-start; /* Căn chiều cao các phần tử */
 }
 
 .student-item {
   display: flex;
-  align-items: center;
+  flex-direction: column; /* Sắp xếp thông tin và ảnh theo chiều dọc */
+  align-items: center; /* Căn giữa ảnh và thông tin */
   background-color: #ffffff;
   border-radius: 8px;
   padding: 15px;
   border: 1px solid #e1e5eb;
-  margin-bottom: 15px;
+  width: 30%; /* Điều chỉnh kích thước để chia đều 3 ô */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: left;  /* Thêm hiệu ứng đổ bóng nhẹ */
+  text-align: center;
+  justify-content: flex-start;
 }
 
 .student-avatar {
@@ -46,7 +55,7 @@
   width: 60px; /* Kích thước ảnh đại diện */
   height: 60px; /* Kích thước ảnh đại diện */
   object-fit: cover;
-  margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
+  margin-bottom: 10px; /* Khoảng cách giữa ảnh và thông tin */
 }
 
 .student-info {
@@ -54,34 +63,3 @@
   color: #333; /* Màu chữ tối để dễ đọc */
 }
 
-.common-links {
-  margin-top: 40px;
-  width: 90%;
-  max-width: 500px;
-}
-
-.github-section, .pdf-section {
-  margin-top: 25px;
-  padding: 25px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.github-section h2, .pdf-section h2 {
-  color: #4a90e2;
-  margin-bottom: 20px;
-  font-size: 1.25rem; /* Tăng kích thước chữ tiêu đề liên kết */
-  font-weight: 600; /* Làm cho tiêu đề đậm hơn */
-}
-
-.github-section a, .pdf-section a {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 0.9rem; /* Kích thước chữ liên kết */
-}
-
-.github-section a:hover, .pdf-section a:hover {
-  text-decoration: underline;
-}
