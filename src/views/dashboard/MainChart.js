@@ -1,136 +1,179 @@
 
 
 
-import React, { useEffect, useRef } from 'react'
-import { CChartLine } from '@coreui/react-chartjs'
-import { getStyle } from '@coreui/utils'
+
+import React, { useEffect, useRef, useState } from 'react';
+import { CChartLine } from '@coreui/react-chartjs';
+import { getStyle } from '@coreui/utils';
+
+const MAX_DATA_POINTS = 10; // Giới hạn số lượng điểm dữ liệu tối đa
 
 const MainChart = () => {
-  const chartRef = useRef(null)
+  const chartRef = useRef(null);
+  const [chartData, setChartData] = useState({
+    labels: [],
+    temperature: [],
+    humidity: [],
+    light: [],
+  });
+
+  // Hàm để định dạng thời gian
+  const formatTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    return dateTime.toLocaleTimeString(); // Trả về thời gian định dạng H:i:s
+  };
 
   useEffect(() => {
-    document.documentElement.addEventListener('ColorSchemeChange', () => {
-      if (chartRef.current) {
-        setTimeout(() => {
-          chartRef.current.options.scales.x.grid.borderColor = getStyle(
-            '--cui-border-color-translucent',
-          )
-          chartRef.current.options.scales.x.grid.color = getStyle('--cui-border-color-translucent')
-          chartRef.current.options.scales.x.ticks.color = getStyle('--cui-body-color')
-          chartRef.current.options.scales.y.grid.borderColor = getStyle(
-            '--cui-border-color-translucent',
-          )
-          chartRef.current.options.scales.y.grid.color = getStyle('--cui-border-color-translucent')
-          chartRef.current.options.scales.y.ticks.color = getStyle('--cui-body-color')
-          chartRef.current.update()
-        })
+    // Hàm lấy dữ liệu từ backend
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/datasensor/data");
+        if (!response.ok) throw new Error('Network response was not ok');
+        const result = await response.json();
+
+        // Lấy dữ liệu mới nhất từ backend
+        const newData = result.data[result.data.length - 1]; // Lấy phần tử cuối cùng
+
+        if (newData) {
+          const formattedTime = formatTime(newData.time);
+          setChartData(prevData => {
+            // Kiểm tra xem dữ liệu mới có khác với dữ liệu cũ không
+            if (prevData.labels.length > 0 && prevData.labels[prevData.labels.length - 1] === formattedTime) {
+              return prevData; // Không thay đổi nếu nhãn thời gian giống nhau
+            }
+
+            const newLabels = [...prevData.labels, formattedTime];
+            const newTemperature = [...prevData.temperature, newData.temperature];
+            const newHumidity = [...prevData.humidity, newData.humidity];
+            const newLight = [...prevData.light, newData.light];
+
+            // Nếu số lượng dữ liệu lớn hơn tối đa, xóa dữ liệu cũ nhất
+            if (newLabels.length > MAX_DATA_POINTS) {
+              newLabels.shift(); // Xóa phần tử đầu tiên
+              newTemperature.shift();
+              newHumidity.shift();
+              newLight.shift();
+            }
+
+            return {
+              labels: newLabels,
+              temperature: newTemperature,
+              humidity: newHumidity,
+              light: newLight,
+            };
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch chart data:", error);
       }
-    })
-  }, [chartRef])
+    };
 
-  const random = (min, max) => Math.round(Math.random() * (max - min) + min)
+    // Gọi fetchData lần đầu
+    fetchData();
 
-  // Tạo nhãn cho các ngày trong tháng
-  const days = Array.from({ length: 31 }, (_, i) => `${i + 1}`)
+    // Thiết lập interval để gọi fetchData sau mỗi 2 giây
+    const intervalId = setInterval(fetchData, 2000);
+
+    // Dọn dẹp khi component unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Cập nhật biểu đồ khi chartData thay đổi
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.update();
+    }
+  }, [chartData]);
 
   return (
-    <>
-      <CChartLine
-        ref={chartRef}
-        style={{ height: '300px', marginTop: '40px' }}
-        data={{
-          labels: days,
-          datasets: [
-            {
-              label: 'Temperature',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-danger'), // Màu đỏ đại diện cho Nhiệt độ
-              pointHoverBackgroundColor: getStyle('--cui-danger'),
-              borderWidth: 2,
-              data: Array.from({ length: 31 }, () => random(10, 35)),
-              yAxisID: 'y1',
-              fill: false,
+    <CChartLine
+      ref={chartRef}
+      style={{ height: '300px', marginTop: '40px' }}
+      data={{
+        labels: chartData.labels,
+        datasets: [
+          {
+            label: 'Nhiệt độ',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: getStyle('--cui-danger'),
+            data: chartData.temperature,
+            fill: true,
+          },
+          {
+            label: 'Độ ẩm',
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: getStyle('--cui-info'),
+            data: chartData.humidity,
+            fill: true,
+          },
+          {
+            label: 'Ánh sáng',
+            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            data: chartData.light,
+            fill: true,
+            yAxisID: 'y2',
+          },
+        ],
+      }}
+      options={{
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+          },
+        },
+        scales: {
+          x: {
+            grid: {
+              borderColor: getStyle('--cui-border-color-translucent'),
+              color: getStyle('--cui-border-color-translucent'),
             },
-            {
-              label: 'Humidity',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-info'), // Màu xanh dương đại diện cho Độ ẩm
-              pointHoverBackgroundColor: getStyle('--cui-info'),
-              borderWidth: 2,
-              data: Array.from({ length: 31 }, () => random(30, 80)),
-              yAxisID: 'y1',
-              fill: false,
-            },
-            {
-              label: 'Light',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-success'), // Màu xanh lá đại diện cho Ánh sáng
-              pointHoverBackgroundColor: getStyle('--cui-success'),
-              borderWidth: 2,
-              data: Array.from({ length: 31 }, () => random(100, 1000)),
-              yAxisID: 'y2',
-              fill: false,
-            },
-          ],
-        }}
-        options={{
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: true,
+            ticks: {
+              color: getStyle('--cui-body-color'),
             },
           },
-          scales: {
-            x: {
-              grid: {
-                color: getStyle('--cui-border-color-translucent'),
-                drawOnChartArea: false,
-              },
-              ticks: {
-                color: getStyle('--cui-body-color'),
-              },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            grid: {
+              borderColor: getStyle('--cui-border-color-translucent'),
+              color: getStyle('--cui-border-color-translucent'),
             },
-            y1: {
-              type: 'linear',
-              position: 'left',
-              grid: {
-                color: getStyle('--cui-border-color-translucent'),
-              },
-              ticks: {
-                color: getStyle('--cui-body-color'),
-                beginAtZero: true,
-                max: 100,
-              },
+            ticks: {
+              color: getStyle('--cui-body-color'),
             },
-            y2: {
-              type: 'linear',
-              position: 'right',
-              grid: {
-                color: 'transparent', // Ẩn lưới cho trục y2
-              },
-              ticks: {
-                color: getStyle('--cui-body-color'),
-                beginAtZero: true,
-                max: 1000,
-              },
-            },
+            min: 0,
+            max: 100,
           },
-          elements: {
-            line: {
-              tension: 0.4,
+          y2: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            grid: {
+              color: 'transparent',
             },
-            point: {
-              radius: 0,
-              hitRadius: 10,
-              hoverRadius: 4,
-              hoverBorderWidth: 3,
+            ticks: {
+              color: getStyle('--cui-body-color'),
             },
+            min: 0,
+            max: 1000,
           },
-        }}
-      />
-    </>
-  )
-}
+        },
+        elements: {
+          line: {
+            tension: 0.4,
+          },
+          point: {
+            radius: 0,
+            hoverRadius: 7,
+            hitRadius: 7,
+          },
+        },
+      }}
+    />
+  );
+};
 
-export default MainChart
-
+export default MainChart;
