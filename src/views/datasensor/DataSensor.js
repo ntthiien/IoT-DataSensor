@@ -237,7 +237,7 @@ const Table = () => {
   // Hàm gọi API với axios
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/datasensor', {
+      const response = await axios.get('http://localhost:5001/api/datasensor', {
         params: {
           sortKey: sortOption,
           sortValue: sortDirection,

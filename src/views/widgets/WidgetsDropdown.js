@@ -17,7 +17,7 @@ const WidgetsDropdown = (props) => {
   // Function to fetch data from the backend
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/datasensor/data');
+      const response = await fetch('http://localhost:5001/api/datasensor/data');
       const data = await response.json();
       console.log(data); // Kiểm tra dữ liệu trả về từ API
 

@@ -163,7 +163,7 @@ const DeviceControl = () => {
   useEffect(() => {
     const fetchDeviceStates = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/history");
+        const response = await fetch("http://localhost:5001/api/history");
         const result = await response.json();
         const devices = result.data;
 
@@ -208,7 +208,7 @@ const DeviceControl = () => {
 
   const sendDeviceAction = async (device, action) => {
     try {
-      await fetch("http://localhost:5000/api/history", {
+      await fetch("http://localhost:5001/api/history", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ device, action }),

@@ -27,7 +27,7 @@ const MainChart = () => {
     // Hàm lấy dữ liệu từ backend
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/datasensor/data");
+        const response = await fetch("http://localhost:5001/api/datasensor/data");
         if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
 
