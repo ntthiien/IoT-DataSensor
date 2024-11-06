@@ -1,7 +1,7 @@
 const History=require("../models/history.model");
 const paginationHelper=require("../helpers/pagination");
 const mqtt = require("mqtt");
-const client = mqtt.connect("mqtt://192.168.1.67:1993", {
+const client = mqtt.connect("mqtt://192.168.143.58:1993", {
     username: "hien",
     password: "123"
 });
@@ -81,16 +81,6 @@ module.exports.pubsub=async(req,res)=>{
         const { device, action } = req.body;
         console.log(req.body);
         const now = new Date();
-
-        // Format the date and time
-        // const formattedTime = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-
-        // const history = new History({
-        //     device,
-        //     action,
-        //     time: formattedTime, // Use the formatted time string here
-        // });
-
         const history = new History({
             device,
             action,
