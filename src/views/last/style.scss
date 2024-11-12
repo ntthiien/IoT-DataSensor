@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50vh;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 90%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .chartBox {
+    width: 30%;
+    height: 90%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  .warning-icon {
+    font-size: 20rem; /* Tăng kích thước icon */
+    margin-bottom: 10px;
+  }
+  

@@ -6,6 +6,7 @@ import {
   cilUser,
   cilStorage,
   cilHistory,
+  cilSmile,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 
@@ -33,6 +34,12 @@ const _nav = [
     name: 'HistoryAction',
     to: '/history',
     icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Last',
+    to: '/last',
+    icon: <CIcon icon={cilSmile} customClassName="nav-icon" />,
   },
 ]
 

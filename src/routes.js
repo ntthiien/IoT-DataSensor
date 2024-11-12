@@ -5,7 +5,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Profile= React.lazy(()=> import('./views/profile/Profile'))
 const DataSensor=React.lazy(()=> import('./views/datasensor/DataSensor'))
 const HistoryAction= React.lazy(()=> import('./views/historyAction/HistoryAction'))
-
+const Last= React.lazy(()=> import('./views/last/Last'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -13,6 +13,7 @@ const routes = [
   { path: '/profile', name: 'Profile', element: Profile, component:'Profile'},
   { path: '/datasensor', name:'DataSensor', element: DataSensor, component:'DataSensor'},
   { path: '/history', name:'HistoryAction', element:HistoryAction, component:'HistoryAction'},
+  { path: '/last', name:'Last', element:Last, component:'Last'},
   
 ]
 
