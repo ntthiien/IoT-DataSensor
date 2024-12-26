@@ -46,7 +46,8 @@ module.exports.index=async(req,res)=>{
     // phan trang
     let initPagniation={
         currentPage:1,
-        limitItems:10,
+        limitItems: req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10, // Lấy giá trị từ frontend hoặc mặc định là 10
+       // limitItems:10,
     };
 
     const countDatasensor=await Datasensor.countDocuments(find);
@@ -78,9 +79,10 @@ module.exports.index=async(req,res)=>{
 // [GET] api/datasensor/data
 module.exports.data=async (req,res)=>{
     const find={
-        deleted:false
+        deleted:false,
     };
     const datasensor =await Datasensor.find(find);
+   // console.log(datasensor)
     res.json({
         data: datasensor
     });

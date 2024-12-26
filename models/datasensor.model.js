@@ -5,6 +5,7 @@ const datasensorSchema=new mongoose.Schema(
         temperature:Number,
         humidity:Number,
         light:Number,
+        windSpeed:Number,
         deleted:{
             type:Boolean,
             default:false,

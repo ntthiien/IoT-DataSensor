@@ -1,7 +1,7 @@
 const History=require("../models/history.model");
 const paginationHelper=require("../helpers/pagination");
 const mqtt = require("mqtt");
-const client = mqtt.connect("mqtt://192.168.143.58:1993", {
+const client = mqtt.connect("mqtt://192.168.2.7:1993", {
     username: "hien",
     password: "123"
 });
@@ -10,13 +10,37 @@ const client = mqtt.connect("mqtt://192.168.143.58:1993", {
 //[GET] api/history
 module.exports.index= async(req,res)=>{
     const find={
-        deleted:false
+        deleted:false,
+        
     };
-
+    // lọc
+    if (req.query.device) {
+        find.device = req.query.device; // Lọc theo tên thiết bị
+    }
+    // end lọc
     // tìm kiếm
-    if (req.query.searchKey && req.query.searchValue) {
-        const regex = new RegExp(req.query.searchValue, 'i'); // Tạo regex cho tìm kiếm không phân biệt hoa thường
-        find[req.query.searchKey] = regex; // Tìm kiếm theo trường searchKey
+    if (req.query.time) {
+        const timeQuery = req.query.time.trim();
+
+        // Kiểm tra nếu chỉ có ngày/tháng/năm (không có giờ, phút, giây)
+        const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/; // Kiểm tra định dạng ngày/tháng/năm
+        const datetimeRegex = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/; // Kiểm tra định dạng ngày/tháng/năm giờ:phút:giây
+
+        let startTime, endTime;
+
+        if (dateRegex.test(timeQuery)) {
+            // Chỉ có ngày/tháng/năm
+            const [, day, month, year] = timeQuery.match(dateRegex);
+            startTime = new Date(year, month - 1, day, 0, 0, 0).toISOString();
+            endTime = new Date(year, month - 1, day, 23, 59, 59, 999).toISOString(); // 23:59:59 trong ngày
+            find.time = { $gte: startTime, $lte: endTime }; // Sử dụng $lte để bao gồm cuối ngày
+        } else if (datetimeRegex.test(timeQuery)) {
+            // Ngày/tháng/năm giờ:phút:giây
+            const [, day, month, year, hour, minute, second] = timeQuery.match(datetimeRegex);
+            startTime = new Date(year, month - 1, day, hour, minute, second).toISOString();
+            endTime = new Date(year, month - 1, day, hour, minute, second, 999).toISOString();
+            find.time = { $gte: startTime, $lte: endTime }; // Sử dụng $gte và $lte cho chính xác thời gian
+        }
     }
     // end search
 
@@ -75,6 +99,8 @@ module.exports.index= async(req,res)=>{
 
 
 
+
+
 //[POST] api/history
 module.exports.pubsub=async(req,res)=>{
     try {
@@ -90,6 +116,7 @@ module.exports.pubsub=async(req,res)=>{
         .then(() => console.log('Data saved to MongoDB', history));
         
         // Publish MQTT message
+        console.log("Sending MQTT message: ", action);
         client.publish("LED", action);
         
         res.status(201).json({ message: "Device action saved", history });
