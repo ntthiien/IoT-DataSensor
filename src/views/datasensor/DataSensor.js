@@ -216,6 +216,234 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { CIcon } from '@coreui/icons-react';
+// import { cilArrowTop, cilArrowBottom } from '@coreui/icons';
+// import { CCard, CCardBody, CTable, CRow, CTableRow, CTableBody, CTableHead, CTableHeaderCell, CTableDataCell, CFormSelect, CButton, CFormInput } from '@coreui/react';
+// import { useNavigate } from 'react-router-dom';
+
+// const Table = () => {
+//   const [data, setData] = useState([]); // Dữ liệu từ API
+//   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+//   const [sortOption, setSortOption] = useState('time'); // Sort key
+//   const [sortDirection, setSortDirection] = useState('asc'); // Sort direction
+//   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+//   const [searchKey, setSearchKey] = useState('');
+//   const [searchValue, setSearchValue] = useState('');
+//   const itemsPerPage = 2; // Số item mỗi trang
+//   const navigate = useNavigate();
+
+//   // Hàm gọi API với axios
+//   const fetchData = async () => {
+//     try {
+//       const response = await axios.get('http://localhost:5001/api/datasensor', {
+//         params: {
+//           sortKey: sortOption,
+//           sortValue: sortDirection,
+//           page: currentPage,
+//           limit: itemsPerPage,
+//           searchKey,
+//           searchValue,
+//         },
+//       });
+//       setData(response.data.data); // Đặt dữ liệu từ API
+//       setTotalPages(response.data.totalPages); // Tổng số trang từ backend
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//     }
+//   };
+
+//   // Gọi API mỗi khi sort hoặc phân trang thay đổi
+//   useEffect(() => {
+//     fetchData();
+//   }, [sortOption, sortDirection, currentPage, searchKey, searchValue]);
+
+//   useEffect(() => {
+//     const newURL = `/datasensor?page=${currentPage}&sortKey=${sortOption}&sortValue=${sortDirection}&searchKey=${searchKey}&searchValue=${searchValue}`;
+//     navigate(newURL, { replace: true }); // Cập nhật URL mà không làm mới trang
+//   }, [currentPage, sortOption, sortDirection, searchKey, searchValue, navigate]);
+
+//   // Tìm kiếm
+//   const handleSearch = (key) => {
+//     setSearchKey(key);
+//     setCurrentPage(1); // Reset to the first page on new search
+//     setSearchValue(''); // Reset search value before updating
+//     fetchData();
+//   };
+
+//   // Xử lý sort (sắp xếp tăng/giảm)
+//   const handleSort = (direction) => {
+//     setSortDirection(direction);
+//   };
+
+//   // Xử lý khi đổi trang
+//   const handlePageChange = (pageNumber) => {
+//     if (pageNumber > 0 && pageNumber <= totalPages) {
+//       setCurrentPage(pageNumber); // Cập nhật trang hiện tại
+//     }
+//   };
+
+//   // Tạo số trang để hiển thị trong phân trang
+//   const getPageNumbers = () => {
+//     const pages = [];
+//     const total = totalPages; // Lấy tổng số trang
+
+//     // Tính toán các trang để hiển thị
+//     const startPage = Math.max(1, currentPage - 1);
+//     const endPage = Math.min(total, startPage + 2);
+
+//     for (let i = startPage; i <= endPage; i++) {
+//       pages.push(i);
+//     }
+
+//     // Nếu tổng số trang nhiều hơn 3, thêm các trang đầu và cuối
+//     if (total > 3) {
+//       if (startPage > 1) {
+//         pages.unshift(1); // Thêm trang 1 vào đầu
+//         if (startPage > 2) {
+//           pages.unshift('...'); // Thêm dấu ... nếu có nhiều trang
+//         }
+//       }
+//       if (endPage < total) {
+//         pages.push('...'); // Thêm dấu ... nếu có nhiều trang
+//         pages.push(total); // Thêm trang cuối vào cuối
+//       }
+//     }
+
+//     return pages;
+//   };
+
+//   return (
+//     <CRow>
+//       <CCard className="mb-4">
+//         <CCardBody>
+//           <div>
+//             {/* Sort options */}
+//             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', width: '250px' }}>
+//               <CFormSelect
+//                 value={sortOption}
+//                 onChange={(e) => setSortOption(e.target.value)}
+//                 style={{ marginRight: '10px' }}
+//               >
+//                 <option value="temperature">Temperature</option>
+//                 <option value="humidity">Humidity</option>
+//                 <option value="light">Light</option>
+//                 <option value="light">windSpeed</option>
+//                 <option value="time">Time</option>
+//               </CFormSelect>
+//               <CButton onClick={() => handleSort('asc')} color="secondary" variant="outline" style={{ marginRight: '5px' }}>
+//                 <CIcon icon={cilArrowTop} />
+//               </CButton>
+//               <CButton onClick={() => handleSort('desc')} color="success" variant="outline">
+//                 <CIcon icon={cilArrowBottom} />
+//               </CButton>
+//             </div>
+
+//             {/* Table */}
+//             <CTable style={{ width: '100%', borderCollapse: 'collapse' }}>
+//               <CTableHead color="light">
+//                 <CTableRow>
+//                   <CTableHeaderCell scope="col">
+//                     <div>Temperature(C)</div>
+//                     <CFormInput
+//                       type="text"
+//                       placeholder="Search..."
+//                       onFocus={() => handleSearch('temperature')}
+//                       onChange={(e) => setSearchValue(e.target.value)}
+//                       size="sm"
+//                       style={{ marginTop: '5px', width: '120px' }}
+//                     />
+//                   </CTableHeaderCell>
+//                   <CTableHeaderCell scope="col">
+//                     <div>Humidity(%)</div>
+//                     <CFormInput
+//                       type="text"
+//                       placeholder="Search..."
+//                       onFocus={() => handleSearch('humidity')}
+//                       onChange={(e) => setSearchValue(e.target.value)}
+//                       size="sm"
+//                       style={{ marginTop: '5px', width: '120px' }}
+//                     />
+//                   </CTableHeaderCell>
+//                   <CTableHeaderCell scope="col">
+//                     <div>Light(LUX)</div>
+//                     <CFormInput
+//                       type="text"
+//                       placeholder="Search..."
+//                       onFocus={() => handleSearch('light')}
+//                       onChange={(e) => setSearchValue(e.target.value)}
+//                       size="sm"
+//                       style={{ marginTop: '5px', width: '120px' }}
+//                     />
+//                   </CTableHeaderCell>
+//                   <CTableHeaderCell scope="col">
+//                     <div>windSpeed(m/s)</div>
+//                     <CFormInput
+//                       type="text"
+//                       placeholder="Search..."
+//                       onFocus={() => handleSearch('windSpeed')}
+//                       onChange={(e) => setSearchValue(e.target.value)}
+//                       size="sm"
+//                       style={{ marginTop: '5px', width: '120px' }}
+//                     />
+//                   </CTableHeaderCell>
+//                   <CTableHeaderCell scope="col">Time</CTableHeaderCell>
+//                 </CTableRow>
+//               </CTableHead>
+//               <CTableBody>
+//                 {data.map((item) => (
+//                   <CTableRow key={item.id}>
+//                     <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.temperature}</CTableDataCell>
+//                     <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.humidity}</CTableDataCell>
+//                     <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.light}</CTableDataCell>
+//                     <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.windSpeed}</CTableDataCell>
+//                     <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>
+//                       {new Date(item.time).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+//                     </CTableDataCell>
+//                   </CTableRow>
+//                 ))}
+//               </CTableBody>
+//             </CTable>
+
+//             {/* Pagination Controls */}
+//             <div style={{ marginTop: '10px', textAlign: 'center' }}>
+//               <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+//                 Prev
+//               </button>
+//               {getPageNumbers().map((number) => (
+//                 <button
+//                   key={number}
+//                   onClick={() => {
+//                     if (number !== '...') {
+//                       handlePageChange(number);
+//                     }
+//                   }}
+//                   style={{
+//                     margin: '0 5px',
+//                     fontWeight: number === currentPage ? 'bold' : 'normal',
+//                     cursor: number === '...' ? 'default' : 'pointer',
+//                   }}
+//                   disabled={number === '...'} // Disable button if it's '...'
+//                 >
+//                   {number}
+//                 </button>
+//               ))}
+//               <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+//                 Next
+//               </button>
+//             </div>
+//           </div>
+//         </CCardBody>
+//       </CCard>
+//     </CRow>
+//   );
+// };
+
+// export default Table;
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CIcon } from '@coreui/icons-react';
@@ -224,17 +452,17 @@ import { CCard, CCardBody, CTable, CRow, CTableRow, CTableBody, CTableHead, CTab
 import { useNavigate } from 'react-router-dom';
 
 const Table = () => {
-  const [data, setData] = useState([]); // Dữ liệu từ API
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [sortOption, setSortOption] = useState('time'); // Sort key
-  const [sortDirection, setSortDirection] = useState('asc'); // Sort direction
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortOption, setSortOption] = useState('time');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [totalPages, setTotalPages] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const [searchValue, setSearchValue] = useState('');
-  const itemsPerPage = 2; // Số item mỗi trang
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Số item mỗi trang, mặc định là 10
   const navigate = useNavigate();
 
-  // Hàm gọi API với axios
+  // Hàm gọi API
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:5001/api/datasensor', {
@@ -242,54 +470,49 @@ const Table = () => {
           sortKey: sortOption,
           sortValue: sortDirection,
           page: currentPage,
-          limit: itemsPerPage,
+          pageSize: itemsPerPage,
           searchKey,
           searchValue,
         },
       });
-      setData(response.data.data); // Đặt dữ liệu từ API
-      setTotalPages(response.data.totalPages); // Tổng số trang từ backend
+      setData(response.data.data);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // Gọi API mỗi khi sort hoặc phân trang thay đổi
+  // Gọi API mỗi khi các tham số thay đổi
   useEffect(() => {
     fetchData();
-  }, [sortOption, sortDirection, currentPage, searchKey, searchValue]);
+  }, [sortOption, sortDirection, currentPage, searchKey, searchValue, itemsPerPage]);
 
   useEffect(() => {
-    const newURL = `/datasensor?page=${currentPage}&sortKey=${sortOption}&sortValue=${sortDirection}&searchKey=${searchKey}&searchValue=${searchValue}`;
-    navigate(newURL, { replace: true }); // Cập nhật URL mà không làm mới trang
-  }, [currentPage, sortOption, sortDirection, searchKey, searchValue, navigate]);
+    const newURL = `/datasensor?page=${currentPage}&sortKey=${sortOption}&sortValue=${sortDirection}&searchKey=${searchKey}&searchValue=${searchValue}&pageSize=${itemsPerPage}`;
+    navigate(newURL, { replace: true });
+  }, [currentPage, sortOption, sortDirection, searchKey, searchValue, itemsPerPage, navigate]);
 
-  // Tìm kiếm
-  const handleSearch = (key) => {
-    setSearchKey(key);
-    setCurrentPage(1); // Reset to the first page on new search
-    setSearchValue(''); // Reset search value before updating
-    fetchData();
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
   };
 
-  // Xử lý sort (sắp xếp tăng/giảm)
   const handleSort = (direction) => {
     setSortDirection(direction);
   };
 
-  // Xử lý khi đổi trang
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber); // Cập nhật trang hiện tại
-    }
+  const handleSearch = (key) => {
+    setSearchKey(key);
+    setCurrentPage(1);
+    setSearchValue('');
+    fetchData();
   };
 
-  // Tạo số trang để hiển thị trong phân trang
   const getPageNumbers = () => {
     const pages = [];
-    const total = totalPages; // Lấy tổng số trang
+    const total = totalPages;
 
-    // Tính toán các trang để hiển thị
     const startPage = Math.max(1, currentPage - 1);
     const endPage = Math.min(total, startPage + 2);
 
@@ -297,17 +520,16 @@ const Table = () => {
       pages.push(i);
     }
 
-    // Nếu tổng số trang nhiều hơn 3, thêm các trang đầu và cuối
     if (total > 3) {
       if (startPage > 1) {
-        pages.unshift(1); // Thêm trang 1 vào đầu
+        pages.unshift(1);
         if (startPage > 2) {
-          pages.unshift('...'); // Thêm dấu ... nếu có nhiều trang
+          pages.unshift('...');
         }
       }
       if (endPage < total) {
-        pages.push('...'); // Thêm dấu ... nếu có nhiều trang
-        pages.push(total); // Thêm trang cuối vào cuối
+        pages.push('...');
+        pages.push(total);
       }
     }
 
@@ -329,6 +551,7 @@ const Table = () => {
                 <option value="temperature">Temperature</option>
                 <option value="humidity">Humidity</option>
                 <option value="light">Light</option>
+                <option value="windSpeed">Wind Speed</option>
                 <option value="time">Time</option>
               </CFormSelect>
               <CButton onClick={() => handleSort('asc')} color="secondary" variant="outline" style={{ marginRight: '5px' }}>
@@ -343,80 +566,79 @@ const Table = () => {
             <CTable style={{ width: '100%', borderCollapse: 'collapse' }}>
               <CTableHead color="light">
                 <CTableRow>
-                  <CTableHeaderCell scope="col">
-                    <div>Temperature(C)</div>
-                    <CFormInput
-                      type="text"
-                      placeholder="Search..."
-                      onFocus={() => handleSearch('temperature')}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      size="sm"
-                      style={{ marginTop: '5px', width: '120px' }}
-                    />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    <div>Humidity(%)</div>
-                    <CFormInput
-                      type="text"
-                      placeholder="Search..."
-                      onFocus={() => handleSearch('humidity')}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      size="sm"
-                      style={{ marginTop: '5px', width: '120px' }}
-                    />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    <div>Light(LUX)</div>
-                    <CFormInput
-                      type="text"
-                      placeholder="Search..."
-                      onFocus={() => handleSearch('light')}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      size="sm"
-                      style={{ marginTop: '5px', width: '120px' }}
-                    />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Time</CTableHeaderCell>
+                  <CTableHeaderCell>Temperature (°C)</CTableHeaderCell>
+                  <CTableHeaderCell>Humidity (%)</CTableHeaderCell>
+                  <CTableHeaderCell>Light (LUX)</CTableHeaderCell>
+                  <CTableHeaderCell>Wind Speed (m/s)</CTableHeaderCell>
+                  <CTableHeaderCell>Time</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {data.map((item) => (
                   <CTableRow key={item.id}>
-                    <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.temperature}</CTableDataCell>
-                    <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.humidity}</CTableDataCell>
-                    <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.light}</CTableDataCell>
-                    <CTableDataCell style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.time}</CTableDataCell>
+                    <CTableDataCell>{item.temperature}</CTableDataCell>
+                    <CTableDataCell>{item.humidity}</CTableDataCell>
+                    <CTableDataCell>{item.light}</CTableDataCell>
+                    <CTableDataCell>{item.windSpeed}</CTableDataCell>
+                    <CTableDataCell>
+                      {new Date(item.time).toLocaleString('vi-VN', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                      })}
+                    </CTableDataCell>
                   </CTableRow>
                 ))}
               </CTableBody>
             </CTable>
 
-            {/* Pagination Controls */}
-            <div style={{ marginTop: '10px', textAlign: 'center' }}>
-              <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                Prev
-              </button>
-              {getPageNumbers().map((number) => (
-                <button
-                  key={number}
-                  onClick={() => {
-                    if (number !== '...') {
-                      handlePageChange(number);
-                    }
-                  }}
-                  style={{
-                    margin: '0 5px',
-                    fontWeight: number === currentPage ? 'bold' : 'normal',
-                    cursor: number === '...' ? 'default' : 'pointer',
-                  }}
-                  disabled={number === '...'} // Disable button if it's '...'
-                >
-                  {number}
+            {/* Pagination */}
+            <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                  Prev
                 </button>
-              ))}
-              <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                Next
-              </button>
+                {getPageNumbers().map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => {
+                      if (number !== '...') {
+                        handlePageChange(number);
+                      }
+                    }}
+                    style={{
+                      margin: '0 5px',
+                      fontWeight: number === currentPage ? 'bold' : 'normal',
+                      cursor: number === '...' ? 'default' : 'pointer',
+                    }}
+                    disabled={number === '...'}
+                  >
+                    {number}
+                  </button>
+                ))}
+                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                  Next
+                </button>
+              </div>
+
+              {/* Page size selector */}
+              <CFormSelect
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(parseInt(e.target.value, 10));
+                  setCurrentPage(1); // Reset to the first page
+                }}
+                style={{ width: '120px' }}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={25}>25</option>
+              </CFormSelect>
             </div>
           </div>
         </CCardBody>
@@ -426,3 +648,4 @@ const Table = () => {
 };
 
 export default Table;
+
